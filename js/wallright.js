@@ -1,10 +1,10 @@
-class Enemy extends Phaser.GameObjects.Sprite {
+class WallRight extends Phaser.GameObjects.Sprite {
     constructor(config) {
-        super(config.scene, config.x, config.y, 'black');
+        super(config.scene, window.innerWidth, 0, 'wall');
         config.scene.add.existing(this);
         this.move()
-        console.log(this)
         this.scene.time.delayedCall(12000, this.die, [], this)
+        this.setOrigin(1)
     }
 
     move(){
