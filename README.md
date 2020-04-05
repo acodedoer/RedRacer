@@ -1,5 +1,5 @@
 ﻿# RedRacer
-A remake of the classic racing brick game made using Phaser3 JS game engine ML5, and a TeachableMachine sound recognition model.
+A remake of the classic racing brick game made using Phaser3 JS game engine ML5, and a TeachableMachine sound recognition model. [The gane can be played online here.](https://acodedoer.github.io/RedRacer/)
 
 ## Game Play
 Game play is achieved by giving commands to move the playing. "LEFT" and "RIGHT" are used to move the player when playing in English while "DAMA" and "HAGU" are used to move the player when playing in Hausa.
