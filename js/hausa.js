@@ -31,11 +31,11 @@ keepScore: function(){
 },
 
 getReady: function(){
-    this.msg1 = this.add.text(window.innerWidth/2, window.innerHeight/2 - 20,'Yi amfani da kalmomin "DAMA" da "HAGU" domin kaucewa hatsari', {fontFamily: 'rockwell', color:"#c73e1d",fontSize: 80 * this.game.global.scaler}).setOrigin(0.5, 1).setAlign('center').setWordWrapWidth(1200*this.game.global.scaler);
-    this.msg2 = this.add.text(window.innerWidth/2, window.innerHeight/1.8,'A ce "JA MUJE" domin fara wasa', {fontFamily: 'rockwell', color:"#000000",fontSize: 80 * this.game.global.scaler}).setOrigin(0.5,0).setAlign('center').setWordWrapWidth(1200*this.game.global.scaler);
-},
+    this.msg = this.add.text(window.innerWidth/2, window.innerHeight/2 - 20,'Yi amfani da kalmomin "DAMA" da "HAGU" domin kaucewa hatsari', {fontFamily: 'rockwell', color:"#c73e1d",fontSize: 100 * this.game.global.scaler}).setOrigin(0.5, 1).setAlign('center').setWordWrapWidth(1200*this.game.global.scaler);
+    this.time.delayedCall(3000, this.start, [], this);},
 
 start: function(){
+    this.msg.destroy();
     this.red = this.physics.add.image(window.innerWidth/2 - (this.game.global.scaler*200), window.innerHeight * 11/12, 'red').setOrigin(0.5,1).setScale(this.game.global.scaler);
     this.red.setCollideWorldBounds(true);
     this.createEnemy()
@@ -77,29 +77,18 @@ die: function(obj){
 },
 
 classifyHausa: function(error, results) {
-    console.log(results)
-    if(this.game.scene.keys.hausa.playing==true){
+    if(this.game.scene.keys.hausa.playing == true){
         if (error) {
             console.error(error);
             return
         }
-        if(this.game.scene.keys.hausa.started == true){
-            console.log(results)
-            if(results[0].confidence>0.75){
-                if(results[0].label=="dama"){
-                    this.game.scene.keys.hausa.red.x = window.innerWidth/2 + (this.game.global.scaler*200);
-                }
-                else if(results[0].label=="hagu"){
-                    this.game.scene.keys.hausa.red.x = window.innerWidth/2 - (this.game.global.scaler*200)
-                }
+        console.log(results)
+        if(results[0].confidence>0.75){
+            if(results[0].label=="dama"){
+                this.game.scene.keys.hausa.red.x = window.innerWidth/2 + (this.game.global.scaler*200);
             }
-        }
-        else{
-            if(results[0].confidence>0.75 && results[0].label=="muje"){
-                this.game.scene.keys.hausa.start()
-                this.game.scene.keys.hausa.started = true
-                this.game.scene.keys.hausa.msg1.destroy()
-                this.game.scene.keys.hausa.msg2.destroy()
+            else if(results[0].label=="hagu"){
+                this.game.scene.keys.hausa.red.x = window.innerWidth/2 - (this.game.global.scaler*200)
             }
         }
     }

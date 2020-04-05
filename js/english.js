@@ -17,7 +17,6 @@ create: function ()
     console.log(this)
     this.classifier = ml5.soundClassifier("SpeechCommands18w", { probabilityThreshold: 0.7 })
     this.classifier.classify(this.classifySound);
-    this.started = false;
     this.msg1
     this.msg2
     this.playing = true;
@@ -34,11 +33,12 @@ keepScore: function(){
 },
 
 getReady: function(){
-    this.msg1 = this.add.text(window.innerWidth/2, window.innerHeight/2 - 20,'Say "LEFT" to move player right or say "RIGHT" to move player right.', {fontFamily: 'rockwell', color:"#c73e1d",fontSize: 80 * this.game.global.scaler}).setOrigin(0.5, 1).setAlign('center').setWordWrapWidth(1200*this.game.global.scaler);
-    this.msg2 = this.add.text(window.innerWidth/2, window.innerHeight/1.8,'Say "Yes" to begin.', {fontFamily: 'rockwell', color:"#000000",fontSize: 80 * this.game.global.scaler}).setOrigin(0.5,0).setAlign('center').setWordWrapWidth(1200*this.game.global.scaler);
+    this.msg = this.add.text(window.innerWidth/2, window.innerHeight/2 - 20,'Say "LEFT" to move player right or say "RIGHT" to move player right.', {fontFamily: 'rockwell', color:"#c73e1d",fontSize: 100 * this.game.global.scaler}).setOrigin(0.5, 1).setAlign('center').setWordWrapWidth(1200*this.game.global.scaler);
+    this.time.delayedCall(3000, this.start, [], this);
 },
 
 start: function(){
+    this.msg.destroy();
     this.red = this.physics.add.image(window.innerWidth/2 - (this.game.global.scaler*200), window.innerHeight * 11/12, 'red').setOrigin(0.5,1).setScale(this.game.global.scaler);
     this.red.setCollideWorldBounds(true);
     this.createEnemy()
@@ -86,22 +86,12 @@ classifySound: function(error, results) {
             return
         }
         console.log(results)
-        if(this.game.scene.keys.english.started == true){
-            if(results[0].confidence>0.75){
-                if(results[0].label=="right"){
-                    this.game.scene.keys.english.red.x = window.innerWidth/2 + (this.game.global.scaler*200);
-                }
-                else if(results[0].label=="left"){
-                    this.game.scene.keys.english.red.x = window.innerWidth/2 - (this.game.global.scaler*200)
-                }
+        if(results[0].confidence>0.75){
+            if(results[0].label=="right"){
+                this.game.scene.keys.english.red.x = window.innerWidth/2 + (this.game.global.scaler*200);
             }
-        }
-        else{
-            if(results[0].confidence>0.75 && results[0].label=="yes"){
-                this.game.scene.keys.english.start()
-                this.game.scene.keys.english.started = true
-                this.game.scene.keys.english.msg1.destroy()
-                this.game.scene.keys.english.msg2.destroy()
+            else if(results[0].label=="left"){
+                this.game.scene.keys.english.red.x = window.innerWidth/2 - (this.game.global.scaler*200)
             }
         }
     }
